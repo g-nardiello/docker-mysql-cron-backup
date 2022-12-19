@@ -32,13 +32,13 @@ ENV CRON_TIME="0 3 * * sun" \
     TIMEOUT="10s" \
     MYSQLDUMP_OPTS="--quick"
 
-COPY ["run.sh", "backup.sh", "restore.sh", "/"]
+COPY ["run.sh", "backup.sh", "restore.sh", "start.sh", "/"]
 RUN mkdir /backup && \
     chmod 777 /backup && \ 
-    chmod 755 /run.sh /backup.sh /restore.sh && \
+    chmod 755 /run.sh /backup.sh /restore.sh /start.sh && \
     touch /mysql_backup.log && \
     chmod 666 /mysql_backup.log
 
 VOLUME ["/backup"]
 
-CMD dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
+CMD /start.sh
