@@ -14,12 +14,15 @@ elif [ -n "${INIT_RESTORE_LATEST}" ]; then
   find /backup -maxdepth 1 -name '*.sql.gz' | tail -1 | xargs /restore.sh
 fi
 
+if ! [ -z "${EXIT_BACKUP+x}" ]; then
+  echo "=> Listening on container shutdown to make last backup"
+  trap "/backup.sh" SIGHUP SIGINT SIGTERM
+  while : ; do sleep 1000 ; done
+fi
+
 echo "${CRON_TIME} /backup.sh >> /mysql_backup.log 2>&1" > /tmp/crontab.conf
 crontab /tmp/crontab.conf
 echo "=> Running cron task manager in foreground"
 exec crond -f -l 8 -L /mysql_backup.log
 
-if [ -n "${EXIT_BACKUP}" ]; then
-  trap "/backup.sh" SIGHUP SIGINT SIGTERM
-  while : ; do sleep 1000 ; done
-fi
+echo "Script ends"
