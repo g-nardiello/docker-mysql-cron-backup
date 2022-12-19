@@ -3,4 +3,6 @@ if ! [ -z "${EXIT_BACKUP}" ]; then
   trap "/backup.sh" SIGHUP SIGINT SIGTERM
 fi
 
-exec dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
+dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
+
+while : ; do sleep 1 ; done
