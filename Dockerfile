@@ -41,4 +41,4 @@ RUN mkdir /backup && \
 
 VOLUME ["/backup"]
 
-CMD /start.sh
+ENTRYPOINT dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
