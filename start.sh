@@ -5,9 +5,13 @@ function final_backup {
     exit 0
 }
 
+echo "Starting MySQL Cron Backup..."
+
 if ! [ -z "${EXIT_BACKUP}" ]; then
-  echo "=> Listening on container shutdown to make last backup"
+  echo "=> Listening on container shutdown gracefully to make last backup"
   trap final_backup SIGHUP SIGINT SIGTERM
 fi
 
-exec dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
+dockerize -wait tcp://${MYSQL_HOST}:${MYSQL_PORT} -timeout ${TIMEOUT} /run.sh
+
+while : ; do sleep 1 ; done
