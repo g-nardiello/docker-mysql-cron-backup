@@ -17,7 +17,7 @@ fi
 function final_backup {
     DATE=$(date +%Y%m%d%H%M)
     echo "=> Requested last backup at $(date "+%Y-%m-%d %H:%M:%S")"
-    exec /backup
+    exec /backup.sh
     exit 0
 }
 
@@ -29,6 +29,11 @@ fi
 echo "${CRON_TIME} /backup.sh >> /mysql_backup.log 2>&1" > /tmp/crontab.conf
 crontab /tmp/crontab.conf
 echo "=> Running cron task manager in foreground"
-exec crond -f -l 8 -L /mysql_backup.log
+# exec crond -f -l 8 -L /mysql_backup.log
+crond -l 8 -L /misql_backup.log &
+
+echo "Listening on crond logfile..."
+
+tail -n +1 -f logfile
 
 echo "Script ends"
