@@ -2,10 +2,10 @@
 
 tail -F /mysql_backup.log &
 
-if ! [ -z "${INIT_BACKUP}" ]; then
+if [ "${INIT_BACKUP}" -gt "0" ]; then
   echo "=> Create a backup on the startup"
   /backup.sh
-elif ! [ -z "${INIT_RESTORE_LATEST}" ]; then
+elif [ -n "${INIT_RESTORE_LATEST}" ]; then
   echo "=> Restore latest backup"
   until nc -z "$MYSQL_HOST" "$MYSQL_PORT"
   do
@@ -24,7 +24,7 @@ function final_backup {
     exit 0
 }
 
-if ! [ -z "${EXIT_BACKUP}" ]; then
+if [ -n "${EXIT_BACKUP}" ]; then
   echo "=> Listening on container shutdown gracefully to make last backup before close"
   trap final_backup SIGHUP SIGINT SIGTERM
 fi
