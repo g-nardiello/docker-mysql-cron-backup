@@ -15,6 +15,8 @@ elif ! [ -z "${INIT_RESTORE_LATEST}" ]; then
   find /backup -maxdepth 1 -name '*.sql.gz' | tail -1 | xargs /restore.sh
 fi
 
+touch /HEALTLY.status
+
 function final_backup {
     DATE=$(date +%Y%m%d%H%M)
     echo "=> Requested last backup at $(date "+%Y-%m-%d %H:%M:%S")"
