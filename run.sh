@@ -1,4 +1,5 @@
 #!/bin/bash
+
 tail -F /mysql_backup.log &
 
 if ! [ -z "${INIT_BACKUP}" ]; then
@@ -29,11 +30,10 @@ fi
 echo "${CRON_TIME} /backup.sh >> /mysql_backup.log 2>&1" > /tmp/crontab.conf
 crontab /tmp/crontab.conf
 echo "=> Running cron task manager in foreground"
-# exec crond -f -l 8 -L /mysql_backup.log
-crond -l 8 -L /misql_backup.log &
+crond -f -l 8 -L /mysql_backup.log &
 
-echo "Listening on crond logfile..."
+echo "Listening on crond, and wait..."
 
-tail -n +1 -f logfile
+while : ; do sleep 1 ; done
 
 echo "Script ends"
