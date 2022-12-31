@@ -12,7 +12,7 @@ elif [ -n "${INIT_RESTORE_LATEST}" ]; then
       echo "waiting database container..."
       sleep 1
   done
-  find /backup -maxdepth 1 -name '*.sql.gz' | tail -1 | xargs /restore.sh
+  find /backup -maxdepth 1 -name '[^l]*.sql.gz' | sort | tail -1 | xargs /restore.sh
 fi
 
 touch /HEALTLY.status
